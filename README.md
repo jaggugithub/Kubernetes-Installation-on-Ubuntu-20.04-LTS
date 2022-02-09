@@ -2,8 +2,8 @@
 This repo is for Installation of latest version of docker &amp; k8s cluster on Ubuntu 20.04 LTS
 
 **Step 1: Install Kubernetes Servers**
-
-sudo apt update
+  
+>sudo apt update
 
 sudo apt -y upgrade && sudo systemctl reboot
 
