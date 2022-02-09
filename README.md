@@ -1,19 +1,19 @@
 # Kubernetes-Installation-on-Ubuntu-20.04-LTS
 This repo is for Installation of latest version of docker &amp; k8s cluster on Ubuntu 20.04 LTS
 
-Step 1: Install Kubernetes Servers
+**Step 1: Install Kubernetes Servers**
 
 sudo apt update
 
 sudo apt -y upgrade && sudo systemctl reboot
 
-Step 2: Install kubelet, kubeadm and kubectl
+**Step 2: Install kubelet, kubeadm and kubectl**
 
 sudo apt update
 
 sudo apt -y install curl apt-transport-https
 
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add –
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add â€“
 
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
@@ -25,13 +25,13 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 kubectl version --client && kubeadm version
 
-Step 3: Disable Swap
+**Step 3: Disable Swap**
 
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 sudo swapoff -a
 
-Step 4: Enable kernel modules and configure sysctl
+**Enable kernel modules and configure sysctl**
 
 sudo modprobe overlay
 
@@ -43,16 +43,17 @@ net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 EOF
 
-sudo sysctl –system
+sudo sysctl â€“system
 
-Step 4: Install Container runtime
-Installing Docker Run Time:
+**Step 4: Install Container runtime**
+
+# Installing Docker Run Time:
 
 sudo apt update
 
 sudo apt install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add –
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add â€“
 
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
@@ -79,9 +80,9 @@ sudo systemctl restart docker
 
 sudo systemctl enable docker
 
-Note: From Step 5 to Step 6 the installation has to be   done only on Master Node.
+**Note: From Step 5 to Step 6 the installation has to be   done only on Master Node.**
 
-Step 5: Initialize master node
+**Step 5: Initialize master node**
 
 # Login to the server to be used as master and make sure that the br_netfilter module is loaded:
 
@@ -109,15 +110,15 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 kubectl cluster-info
 
-Step 6: Install network plugin on Master
+**Step 6: Install network plugin on Master**
 
-In this guide we’ll use Flannel.
+In this guide weâ€™ll use Flannel.
 
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
-Step 7: Add worker nodes
+**Step 7: Add worker nodes**
 
-sudo kubeadm join 10.154.0.15:6443 --token 2kep4q.m49l6pywehje5ml7 --discovery-token-ca-cert-hash sha256:a90d5936618b4c695faa2284505fee3a9aa914e55002738f0e81682e7c1d204b
+sudo kubeadm join.......(Please copy paste the command and run it in terminal)
 
 Now please login to the master node and check whether this worker node has joined the cluster or not.
 
