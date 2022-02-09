@@ -47,7 +47,7 @@ sudo sysctl –system
 
 **Step 4: Install Container runtime**
 
-# Installing Docker Run Time:
+Installing Docker Run Time:
 
 sudo apt update
 
@@ -80,25 +80,25 @@ sudo systemctl restart docker
 
 sudo systemctl enable docker
 
-**Note: From Step 5 to Step 6 the installation has to be   done only on Master Node.**
+# **Note: From Step 5 to Step 6 the installation has to be   done only on Master Node.**
 
 **Step 5: Initialize master node**
 
-# Login to the server to be used as master and make sure that the br_netfilter module is loaded:
+Login to the server to be used as master and make sure that the br_netfilter module is loaded:
 
 lsmod | grep br_netfilter
 
-# Enable kubelet service
+Enable kubelet service
 
 sudo systemctl enable kubelet
 
-# We now want to initialize the machine that will run the control plane components which includes etcd (the cluster database) and the API Server.
+We now want to initialize the machine that will run the control plane components which includes etcd (the cluster database) and the API Server.
 
 sudo kubeadm config images pull
 
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 
-# Configure kubectl using the below commands:
+Configure kubectl using the below commands:
 
 mkdir -p $HOME/.kube
 
@@ -106,7 +106,7 @@ sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
 
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#To check the Check cluster status:
+To check the Check cluster status:
 
 kubectl cluster-info
 
