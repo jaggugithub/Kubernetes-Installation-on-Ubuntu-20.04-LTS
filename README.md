@@ -80,7 +80,7 @@ sudo systemctl restart docker
 
 sudo systemctl enable docker
 
-# **Note: From Step 5 to Step 6 the installation has to be   done only on Master Node.**
+# **Step 5 & Step 6 installation has to be done only on Master Node.**
 
 **Step 5: Initialize master node**
 
