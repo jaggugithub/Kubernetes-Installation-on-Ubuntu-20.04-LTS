@@ -1,13 +1,13 @@
 # Kubernetes-Installation-on-Ubuntu-20.04-LTS
 This repo is for Installation of latest version of docker &amp; k8s cluster on Ubuntu 20.04 LTS
 
-**Step 1: Install Kubernetes Servers**
+### **Step 1: Install Kubernetes Servers**
   
 >sudo apt update
 
 >sudo apt -y upgrade && sudo systemctl reboot
 
-**Step 2: Install kubelet, kubeadm and kubectl**
+### **Step 2: Install kubelet, kubeadm and kubectl**
 
 >sudo apt update
 
@@ -25,13 +25,13 @@ This repo is for Installation of latest version of docker &amp; k8s cluster on U
 
 >kubectl version --client && kubeadm version
 
-**Step 3: Disable Swap**
+### **Step 3: Disable Swap**
 
 >sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 >sudo swapoff -a
 
-**Enable kernel modules and configure sysctl**
+### **Enable kernel modules and configure sysctl**
 
 >sudo modprobe overlay
 
@@ -45,9 +45,9 @@ EOF
 
 >sudo sysctl –system
 
-**Step 4: Install Container runtime**
+### **Step 4: Install Container runtime**
 
-Installing Docker Run Time:
+#### Installing Docker Run Time:
 
 >sudo apt update
 
@@ -82,7 +82,7 @@ EOF
 
 # **Step 5 & Step 6 installation has to be done only on Master Node.**
 
-**Step 5: Initialize master node**
+### **Step 5: Initialize master node**
 
 Login to the server to be used as master and make sure that the br_netfilter module is loaded:
 
@@ -110,13 +110,13 @@ To check the Check cluster status:
 
 >kubectl cluster-info
 
-**Step 6: Install network plugin on Master**
+### **Step 6: Install network plugin on Master**
 
 In this guide we’ll use Flannel.
 
 >kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
-**Step 7: Add worker nodes**
+### **Step 7: Add worker nodes**
 
 >sudo kubeadm join.......(Please copy paste the command and run it in terminal)
 
