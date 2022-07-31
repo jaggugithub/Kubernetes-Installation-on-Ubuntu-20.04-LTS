@@ -3,33 +3,33 @@ This repo is for Installation of latest version of docker &amp; k8s cluster on U
 
 #### Please follow from step 1 to step 4 on every node, step 5 & step 6 only on master node and step 7 on only worker nodes.
 
-### **Step 1: Install Kubernetes Servers**
+### **Step 1: Disable Swap**
+
+> Turn off swap
+```
+sudo swapoff -a
+```
+
+### **Step 2: Install Kubernetes Servers**
 
 > Once the servers are ready, update them.
 ```
-sudo apt update
+sudo apt-get update 
 ```
-> After updating,upgrade the servers and reboot the system
-```
-sudo apt -y upgrade && sudo systemctl reboot
-```
-### **Step 2: Install kubelet, kubeadm and kubectl**
+### **Step 3: Install kubelet, kubeadm and kubectl**
 
 > After the servers are rebooted, add Kubernetes repository for Ubuntu 20.04 to all the servers.
 ```
-sudo apt update
-```
-```
-sudo apt -y install curl apt-transport-https
+sudo apt-get install -y apt-transport-https curl
 ```
 > Add the GPG key for kubernetes
 
 ```
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add –
+sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ```
 > Add the kubernetes repository
 ```
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
 ```
 > Update the repository
 ```
@@ -37,7 +37,7 @@ sudo apt update
 ```
 > Install Kubernetes packages.
 ```
-sudo apt -y install vim git curl wget kubelet kubeadm kubectl
+sudo apt-get install -y kubelet=1.24.0-00 kubeadm=1.24.0-00 kubectl=1.24.0-00 docker.io
 ```
 > To hold the versions so that the versions will not get accidently upgraded.
 ```
@@ -46,36 +46,6 @@ sudo apt-mark hold kubelet kubeadm kubectl
 > Confirm installation by checking the version of kubectl
 ```
 kubectl version --client && kubeadm version
-```
-### **Step 3: Disable Swap**
-
-> Turn off swap
-```
-sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-```
-```
-sudo swapoff -a
-```
-### **Enable kernel modules and configure sysctl**
-
-> Enable kernel modules and configure sysctl
-```
-sudo modprobe overlay
-```
-```
-sudo modprobe br_netfilter
-```
-> Enable the iptables bridge(Set a value in the sysctl file , to allow proper network settings for Kubernetes on all the servers)
-```
-sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.ip_forward = 1
-EOF
-```
-> Reload sysctl
-```
-sudo sysctl –system
 ```
 ### **Step 4: Install Container runtime**
 
@@ -89,7 +59,7 @@ sudo apt install -y curl gnupg2 software-properties-common apt-transport-https c
 ```
 > Add the GPG key for Docker
 ```
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add –
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 > Add docker Repo
 ```
@@ -98,54 +68,15 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 ```
 sudo apt update
 ```
-> Install Docker Packages
+> Start & Enable Docker Packages
 ```
-sudo apt install -y containerd.io docker-ce docker-ce-cli
-```
-> Create required directories
-```
-sudo mkdir -p /etc/systemd/system/docker.service.d
-```
-> Create docker daemon json config file
-```
-sudo tee /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
-  },
-  "storage-driver": "overlay2"
-}
-EOF
-```
-> Start and enable Docker Services
-```
-sudo systemctl daemon-reload
-```
-```
-sudo systemctl restart docker
-```
-```
-sudo systemctl enable docker
+sudo systemctl start docker && sudo systemctl enable docker
 ```
 # **Step 5 & Step 6 installation has to be done only on Master Node.**
 
 ### **Step 5: Initialize master node**
 
-> Login to the server to be used as **Master Node** and make sure that the br_netfilter module is loaded
-```
-lsmod | grep br_netfilter
-```
-> Enable kubelet service
-```
-sudo systemctl enable kubelet
-```
-> We will now have to initialize the machine that will run the control plane components which includes etcd (the cluster database) and the API Server.
-```
-sudo kubeadm config images pull
-```
-> Initialize the cluster by passing the cidr value and the value
+> Login to the server to be used as **Master Node** and Initialize the cluster by passing the cidr value and the value.
 ```
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 ```
@@ -154,10 +85,10 @@ sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 mkdir -p $HOME/.kube
 ```
 ```
-sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo cp -i /etc/kubernetes/admin.conf $home/.kube/config
 ```
 ```
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $home/.kube/config
 ```
 To check the Check cluster status:
 ```
