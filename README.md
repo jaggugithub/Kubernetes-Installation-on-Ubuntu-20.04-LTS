@@ -50,24 +50,6 @@ kubectl version --client && kubeadm version
 ### **Step 4: Install Container runtime**
 
 #### Installing Docker Run Time:
-
-```
-sudo apt update
-```
-```
-sudo apt install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
-```
-> Add the GPG key for Docker
-```
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-```
-> Add docker Repo
-```
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-```
-```
-sudo apt update
-```
 > Start & Enable Docker Packages
 ```
 sudo systemctl start docker && sudo systemctl enable docker
