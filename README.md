@@ -59,6 +59,13 @@ sudo systemctl start docker && sudo systemctl enable docker
 ### **Step 5: Initialize master node**
 
 > Login to the server to be used as **Master Node** and Initialize the cluster by passing the cidr value and the value.
+
+> For Flannel Network
+```
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+```
+
+> For Calico Network
 ```
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 ```
@@ -104,10 +111,3 @@ kubeadm token create --print-join-command
 kubectl get nodes
 ```
 ##### Similarly follow the same steps for creating the other worker node or for remaining nodes as well.
-
-
-
-
-
-
-
