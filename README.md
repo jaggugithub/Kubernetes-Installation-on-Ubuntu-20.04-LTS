@@ -81,7 +81,7 @@ sudo apt update
 ```
 > Install Docker Packages
 ```
-sudo apt install -y docker-ce
+sudo apt install -y docker-ce=5:20.10.7~3-0~ubuntu-$(lsb_release -cs)
 ```
 > To Hold The Version Of Docker
 ```
