@@ -94,18 +94,14 @@ sudo sysctl -p
 
 ### **Step 5: Initialize master node**
 
-> Enable kubelet service
-```
-sudo systemctl enable kubelet
-```
+#### For Flannel Network
 
-#### Initialize the cluster by passing the cidr value.
-
-> For Flannel Network
 ```
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
-> For calico Network
+
+#### For calico Network
+
 ```
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 ```
