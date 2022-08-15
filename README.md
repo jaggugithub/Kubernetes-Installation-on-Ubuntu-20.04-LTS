@@ -17,9 +17,6 @@ sudo apt -y upgrade && sudo systemctl reboot
 
 > After the servers are rebooted, add Kubernetes repository for Ubuntu 20.04 to all the servers.
 ```
-sudo apt update
-```
-```
 sudo apt -y install curl apt-transport-https
 ```
 > Add the GPG key for kubernetes
