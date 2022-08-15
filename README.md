@@ -1,7 +1,7 @@
 # Kubernetes-Installation-on-Ubuntu-20.04-LTS
 This repo is for Installation of latest version of docker &amp; k8s cluster on Ubuntu 20.04 LTS
 
-#### Please follow from step 1 to step 4 on every node, step 4 & step 5 only on master node and step 6 only on worker nodes.
+#### Please follow from step 1 to step 3 on every node, step 4 & step 5 only on master node and step 6 only on worker nodes.
 
 ### **Step 1: Update & Upgrade The Servers**
 
