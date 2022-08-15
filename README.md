@@ -103,6 +103,7 @@ sudo apt-mark hold docker-ce
 ```
 sudo systemctl restart docker
 ```
+```
 sudo systemctl enable docker
 ```
 # **Step 5 & Step 6 installation has to be done only on Master Node.**
