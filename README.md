@@ -1,19 +1,27 @@
 # Kubernetes-Installation-on-Ubuntu-20.04-LTS
 This repo is for Installation of latest version of docker &amp; k8s cluster on Ubuntu 20.04 LTS
 
-#### Please follow from step 1 to step 4 on every node, step 5 & step 6 only on master node and step 7 on only worker nodes.
+#### Please follow from step 1 to step 4 on every node, step 4 & step 5 only on master node and step 6 only on worker nodes.
 
-### **Step 1: Install Kubernetes Servers**
+### **Step 1: Update & Upgrade The Servers**
 
 > Once the servers are ready, update them.
 ```
 sudo apt update
 ```
-> After updating,upgrade the servers and reboot the system
+> After updating,upgrade the servers
 ```
 sudo apt -y upgrade
 ```
-### **Step 2: Install kubelet, kubeadm and kubectl**
+### **Step 2: Install Docker, kubelet, kubeadm and kubectl**
+> Add the GPG key for Docker
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+> Add docker Repo
+```
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+```
 > Add the GPG key for kubernetes
 
 ```
@@ -29,38 +37,13 @@ EOF
 ```
 sudo apt update
 ```
-> Install Kubernetes packages.
+> Install Docker and Kubernetes packages.
 ```
-sudo apt -y install vim git curl wget kubelet kubeadm kubectl
+sudo apt-get install -y docker-ce=5:20.10.7~3-0~ubuntu-$(lsb_release -cs) kubelet=1.21.1-00 kubeadm=1.21.1-00 kubectl=1.21.1-00
 ```
 > To hold the versions so that the versions will not get accidently upgraded.
 ```
-sudo apt-mark hold kubelet kubeadm kubectl
-```
-> Confirm installation by checking the version of kubectl
-```
-kubectl version --client && kubeadm version
-```
-
-### **Step 3: Install Container runtime**
-
-#### Installing Docker Run Time:
-
-> Add the GPG key for Docker
-```
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-```
-> Add docker Repo
-```
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-```
-> Install Docker Packages
-```
-sudo apt install -y docker-ce=5:20.10.7~3-0~ubuntu-$(lsb_release -cs)
-```
-> To Hold The Version Of Docker
-```
-sudo apt-mark hold docker-ce
+sudo apt-mark hold docker-ce kubelet kubeadm kubectl
 ```
 > Start and enable Docker Services
 ```
@@ -69,8 +52,12 @@ sudo systemctl restart docker
 ```
 sudo systemctl enable docker
 ```
+> Confirm installation by checking the version of kubectl
+```
+kubectl version --client && kubeadm version
+```
 
-### **Step 4: Disable Swap**
+### **Step 3: Disable Swap**
 
 > Turn off swap
 ```
@@ -85,9 +72,9 @@ echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-# **Step 5 & Step 6 installation has to be done only on Master Node.**
+# **Step 4 & Step 5 installation has to be done only on Master Node.**
 
-### **Step 5: Initialize master node**
+### **Step 4: Initialize master node**
 
 #### For Flannel Network
 
@@ -114,7 +101,7 @@ To check the Check cluster status:
 ```
 kubectl cluster-info
 ```
-### **Step 6: Install network plugin on Master**
+### **Step 5: Install network plugin on Master**
 
 > To Set with flannel networking
 ```
@@ -124,7 +111,7 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 ```
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
-### **Step 7: Add worker nodes**
+### **Step 6: Add worker nodes**
 
 > Joining the node to the cluster:
 ```
