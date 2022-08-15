@@ -26,7 +26,9 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 ```
 > Add the kubernetes repository
 ```
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+cat << EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
 ```
 > Update the repository
 ```
@@ -44,30 +46,11 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ```
 kubectl version --client && kubeadm version
 ```
-### **Step 3: Disable Swap**
 
-> Turn off swap
-```
-sudo swapoff -a
-```
-> Enable the iptables bridge(Set a value in the sysctl file , to allow proper network settings for Kubernetes on all the servers)
-```
-echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
-```
-> Reload sysctl
-```
-sudo sysctl -p
-```
-### **Step 4: Install Container runtime**
+### **Step 3: Install Container runtime**
 
 #### Installing Docker Run Time:
 
-```
-sudo apt update
-```
-```
-sudo apt install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
-```
 > Add the GPG key for Docker
 ```
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -75,9 +58,6 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 > Add docker Repo
 ```
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-```
-```
-sudo apt update
 ```
 > Install Docker Packages
 ```
@@ -94,6 +74,22 @@ sudo systemctl restart docker
 ```
 sudo systemctl enable docker
 ```
+
+### **Step 4: Disable Swap**
+
+> Turn off swap
+```
+sudo swapoff -a
+```
+> Enable the iptables bridge(Set a value in the sysctl file , to allow proper network settings for Kubernetes on all the servers)
+```
+echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
+```
+> Reload sysctl
+```
+sudo sysctl -p
+```
+
 # **Step 5 & Step 6 installation has to be done only on Master Node.**
 
 ### **Step 5: Initialize master node**
