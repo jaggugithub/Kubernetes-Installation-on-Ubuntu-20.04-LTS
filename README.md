@@ -82,7 +82,7 @@ sudo apt install -y curl gnupg2 software-properties-common apt-transport-https c
 ```
 > Add the GPG key for Docker
 ```
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add –
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 > Add docker Repo
 ```
