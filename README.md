@@ -25,7 +25,7 @@ sudo apt -y install curl apt-transport-https
 > Add the GPG key for kubernetes
 
 ```
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add –
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ```
 > Add the kubernetes repository
 ```
@@ -67,15 +67,11 @@ sudo modprobe br_netfilter
 ```
 > Enable the iptables bridge(Set a value in the sysctl file , to allow proper network settings for Kubernetes on all the servers)
 ```
-sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.ip_forward = 1
-EOF
+echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
 ```
 > Reload sysctl
 ```
-sudo sysctl –system
+sudo sysctl -p
 ```
 ### **Step 4: Install Container runtime**
 
@@ -100,32 +96,15 @@ sudo apt update
 ```
 > Install Docker Packages
 ```
-sudo apt install -y containerd.io docker-ce docker-ce-cli
+sudo apt install -y docker-ce
 ```
-> Create required directories
+> To Hold The Version Of Docker
 ```
-sudo mkdir -p /etc/systemd/system/docker.service.d
-```
-> Create docker daemon json config file
-```
-sudo tee /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
-  },
-  "storage-driver": "overlay2"
-}
-EOF
+sudo apt-mark hold docker-ce
 ```
 > Start and enable Docker Services
 ```
-sudo systemctl daemon-reload
-```
-```
 sudo systemctl restart docker
-```
 ```
 sudo systemctl enable docker
 ```
@@ -141,11 +120,12 @@ lsmod | grep br_netfilter
 ```
 sudo systemctl enable kubelet
 ```
-> We will now have to initialize the machine that will run the control plane components which includes etcd (the cluster database) and the API Server.
+####Initialize the cluster by passing the cidr value.
+> For Flannel Network
 ```
-sudo kubeadm config images pull
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 ```
-> Initialize the cluster by passing the cidr value and the value
+> For calico Network
 ```
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16
 ```
@@ -170,6 +150,10 @@ In this guide we’ll use Flannel.
 > To Set the flannel networking
 ```
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+> To Set the Calico networking
+```
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 ### **Step 7: Add worker nodes**
 
