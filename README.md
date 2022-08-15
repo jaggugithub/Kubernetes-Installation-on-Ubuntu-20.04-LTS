@@ -11,7 +11,7 @@ sudo apt update
 ```
 > After updating,upgrade the servers and reboot the system
 ```
-sudo apt -y upgrade && sudo systemctl reboot
+sudo apt -y upgrade
 ```
 ### **Step 2: Install kubelet, kubeadm and kubectl**
 
