@@ -48,19 +48,7 @@ kubectl version --client && kubeadm version
 
 > Turn off swap
 ```
-sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-```
-```
 sudo swapoff -a
-```
-### **Enable kernel modules and configure sysctl**
-
-> Enable kernel modules and configure sysctl
-```
-sudo modprobe overlay
-```
-```
-sudo modprobe br_netfilter
 ```
 > Enable the iptables bridge(Set a value in the sysctl file , to allow proper network settings for Kubernetes on all the servers)
 ```
@@ -110,15 +98,13 @@ sudo systemctl enable docker
 
 ### **Step 5: Initialize master node**
 
-> Login to the server to be used as **Master Node** and make sure that the br_netfilter module is loaded
-```
-lsmod | grep br_netfilter
-```
 > Enable kubelet service
 ```
 sudo systemctl enable kubelet
 ```
-####Initialize the cluster by passing the cidr value.
+
+#### Initialize the cluster by passing the cidr value.
+
 > For Flannel Network
 ```
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
@@ -143,13 +129,11 @@ kubectl cluster-info
 ```
 ### **Step 6: Install network plugin on Master**
 
-In this guide we’ll use Flannel.
-
-> To Set the flannel networking
+> To Set with flannel networking
 ```
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
-> To Set the Calico networking
+> To Set with Calico networking
 ```
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
