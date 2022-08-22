@@ -72,6 +72,17 @@ echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
+#### Removing container Runtime Error
+
+> Remove config.toml
+```
+sudo rm -rf /etc/containerd/config.toml
+```
+> Restart Containerd
+```
+sudo systemctl restart containerd
+```
+
 # **Step 4 & Step 5 installation has to be done only on Master Node.**
 
 ### **Step 4: Initialize master node**
